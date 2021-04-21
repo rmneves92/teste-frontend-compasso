@@ -3,22 +3,25 @@ import Home from "./screens/Home";
 import UserDetails from "./screens/UserDetails";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import { UserProvider } from "./context/userContext";
 
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Header />
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/:id" exact component={UserDetails} />
-          <Route render={() => <Redirect to="/" />} />
-        </Switch>
+      <UserProvider>
+        <BrowserRouter>
+          <Header />
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/:id" exact component={UserDetails} />
+            <Route render={() => <Redirect to="/" />} />
+          </Switch>
 
-        {/* <Footer /> */}
-      </BrowserRouter>
+          {/* <Footer /> */}
+        </BrowserRouter>
+      </UserProvider>
     </div>
   );
 }
