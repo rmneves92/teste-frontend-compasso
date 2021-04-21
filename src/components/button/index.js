@@ -1,10 +1,16 @@
 import React from "react";
 import { Button } from "reactstrap";
 import PropTypes from "prop-types";
+import "./styles.scss";
 
 const MyButton = (props) => {
   return (
-    <Button onClick={() => props.handleClick()} {...props}>
+    <Button
+      className="button"
+      outline
+      onClick={() => props.handleClick()}
+      {...props}
+    >
       {props.children}
     </Button>
   );

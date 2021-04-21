@@ -16,7 +16,7 @@ import {
 const UserDetails = (props) => {
   const { user } = useContext(UserContext);
 
-  console.log(user);
+  console.log("dados do usuario", user);
   return (
     // <Media>
     //   <Media left top href={user.html_url} target="_blank">
@@ -31,13 +31,13 @@ const UserDetails = (props) => {
 
     <Container>
       <Card>
-        <CardImg top width="1%" src={user.avatar_url} alt="Card image cap" />
+        <CardImg top width="1%" src={user?.avatar_url} alt="Card image cap" />
         <CardBody>
-          <CardTitle tag="h5">{user.name}</CardTitle>
+          <CardTitle tag="h5">{user?.name}</CardTitle>
           <CardSubtitle tag="h6" className="mb-2 text-muted">
             Bio
           </CardSubtitle>
-          <CardText>{user.bio}</CardText>
+          <CardText>{user?.bio}</CardText>
           <Button>Button</Button>
         </CardBody>
       </Card>

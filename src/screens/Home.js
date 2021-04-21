@@ -5,54 +5,103 @@ import MyButton from "../components/button";
 import Results from "../components/results";
 import api from "../services/api";
 import { UserContext } from "../context/userContext";
-import { useHistory } from "react-router-dom";
+import {
+  Card,
+  CardTitle,
+  Col,
+  Toast,
+  ToastBody,
+  ToastHeader,
+  Row,
+} from "reactstrap";
 
 const Home = (props) => {
   const [query, setQuery] = useState("rmneves92");
-  const [repos, setRepos] = useState([]);
+  const [list, setList] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [title, setTitle] = useState("");
+
   const { user, setUser } = useContext(UserContext);
-  const history = useHistory();
+
+  const toggle = () => setShowToast(!showToast);
 
   const handleChange = (value) => {
     setQuery(value);
   };
-  const getUser = async () => {
-    api.get(`/users/${query}`).then((res) => {
-      setUser(res.data);
-      console.log(res.data);
-      history.push(`/${res.data.login}`);
-    });
+  const getUser = () => {
+    api
+      .get(`/users/${query}`)
+      .then((res) => setUser(res.data))
+      .catch((err) => {
+        setShowToast(true);
+        console.log(err.response);
+      });
   };
 
-  const getRepos = async () => {
-    api.get(`/users/${query}/repos`).then((res) => {
-      setRepos(res.data);
-    });
+  const getRepos = () => {
+    api
+      .get(`/users/${query}/repos`)
+      .then((res) => {
+        setList(res.data);
+        setTitle("repos");
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
-  const getStarred = async () => {
-    api.get(`/users/${query}/starred`).then((res) => {
-      setRepos(res.data);
-    });
+  const getStarred = () => {
+    api
+      .get(`/users/${query}/starred`)
+      .then((res) => {
+        setList(res.data);
+        setTitle("starred");
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
   return (
     <Container>
-      <h1>Home</h1>
-      <SearchBar value={query} handleChange={handleChange} />
+      <Row>
+        <Col sm="12">
+          <Card body>
+            <CardTitle tag="h5">Buscar pelo usuário</CardTitle>
+            <Row>
+              <Col sm="12">
+                <SearchBar
+                  value={query}
+                  handleChange={handleChange}
+                  handleClick={getUser}
+                />
+              </Col>
+            </Row>
 
-      <MyButton handleClick={getRepos} color="danger">
-        getRepos
-      </MyButton>
-      <MyButton handleClick={getUser} color="info">
-        getUser
-      </MyButton>
+            {user && (
+              <Row>
+                <Col sm="12">
+                  <MyButton handleClick={getRepos} color="primary">
+                    Repos
+                  </MyButton>
 
-      <MyButton handleClick={getStarred} color="info">
-        getStarred
-      </MyButton>
+                  <MyButton handleClick={getStarred} color="primary">
+                    Starred
+                  </MyButton>
+                </Col>
+              </Row>
+            )}
+          </Card>
+        </Col>
+      </Row>
 
-      <Results repos={repos} />
+      <Toast isOpen={showToast}>
+        <ToastHeader icon="danger" toggle={toggle}>
+          Erro
+        </ToastHeader>
+        <ToastBody>Ocorreu um erro</ToastBody>
+      </Toast>
+      <Results list={list} title={title} />
     </Container>
   );
 };

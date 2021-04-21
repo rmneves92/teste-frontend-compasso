@@ -1,24 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ListGroup, ListGroupItem, Row } from "reactstrap";
+import {
+  ListGroup,
+  ListGroupItem,
+  Row,
+  Col,
+  Card,
+  CardTitle,
+} from "reactstrap";
 
-const Results = ({ repos }) => {
-  console.log("repos recebida:", repos);
+const Results = ({ list, title }) => {
   return (
     <Row>
-      <ListGroup>
-        {repos.map((repo) => (
-          <ListGroupItem action tag="a" href={repo.html_url}>
-            {repo.name}
-          </ListGroupItem>
-        ))}
-      </ListGroup>
+      <Col sm="12">
+        {list.length > 0 && (
+          <Card body>
+            <CardTitle tag="h5">{title}</CardTitle>
+            <ListGroup>
+              {list.map((repo) => (
+                <ListGroupItem>{repo.name}</ListGroupItem>
+              ))}
+            </ListGroup>
+          </Card>
+        )}
+      </Col>
     </Row>
   );
 };
 
 Results.propTypes = {
-  repos: PropTypes.array.isRequired,
+  list: PropTypes.array.isRequired,
+  title: PropTypes.string,
 };
 
 export default Results;
