@@ -5,12 +5,7 @@ import "./styles.scss";
 
 const MyButton = (props) => {
   return (
-    <Button
-      className="button"
-      outline
-      onClick={() => props.handleClick()}
-      {...props}
-    >
+    <Button className="button" outline onClick={() => props.handleClick()}>
       {props.children}
     </Button>
   );

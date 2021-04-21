@@ -9,16 +9,16 @@ import {
   CardTitle,
 } from "reactstrap";
 
-const Results = ({ list, title }) => {
+const Results = ({ repo }) => {
   return (
     <Row>
       <Col sm="12">
-        {list.length > 0 && (
+        {repo.list.length > 0 && (
           <Card body>
-            <CardTitle tag="h5">{title}</CardTitle>
+            <CardTitle tag="h5">{repo.name}</CardTitle>
             <ListGroup>
-              {list.map((repo) => (
-                <ListGroupItem>{repo.name}</ListGroupItem>
+              {repo.list.map((item) => (
+                <ListGroupItem key={item.id}>{item.name}</ListGroupItem>
               ))}
             </ListGroup>
           </Card>
@@ -29,8 +29,7 @@ const Results = ({ list, title }) => {
 };
 
 Results.propTypes = {
-  list: PropTypes.array.isRequired,
-  title: PropTypes.string,
+  repo: PropTypes.any.isRequired,
 };
 
 export default Results;

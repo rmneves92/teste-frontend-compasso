@@ -1,0 +1,23 @@
+$avatar-size: 200px;
+
+.user {
+  &-details {
+    display: flex;
+    margin-top: 36px;
+  }
+
+  &-avatar {
+    width: $avatar-size;
+    border-radius: $avatar-size / 2;
+    box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  }
+
+  &-info {
+    margin-left: 24px;
+
+    &-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+  }
+}

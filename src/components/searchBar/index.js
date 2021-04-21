@@ -7,8 +7,9 @@ const SearchBar = ({ value, handleChange, handleClick }) => {
     <InputGroup>
       <Input
         value={value}
-        placeholder="username"
+        placeholder="Digite o nickname do usuário..."
         onChange={(e) => handleChange(e.target.value)}
+        onKeyUp={(e) => e.key === "Enter" && handleClick()}
       />
       <InputGroupAddon addonType="append">
         <Button onClick={() => handleClick()} color="danger">

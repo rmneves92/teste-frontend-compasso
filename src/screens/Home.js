@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container } from "reactstrap";
 import SearchBar from "../components/searchBar";
-import MyButton from "../components/button";
 import Results from "../components/results";
 import api from "../services/api";
 import { UserContext } from "../context/userContext";
@@ -13,28 +12,44 @@ import {
   ToastBody,
   ToastHeader,
   Row,
+  Button,
 } from "reactstrap";
 
+const initialRepoState = {
+  name: "",
+  list: [],
+};
 const Home = (props) => {
-  const [query, setQuery] = useState("rmneves92");
-  const [list, setList] = useState([]);
+  const [query, setQuery] = useState("");
+  const [repo, setRepo] = useState(initialRepoState);
   const [showToast, setShowToast] = useState(false);
-  const [title, setTitle] = useState("");
 
   const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    if (repo.list.length > 0) setRepo(initialRepoState);
+
+    setUser(null);
+  }, []);
+
+  // useEffect(() => {
+  //   if (list.length > 0) setList([]);
+
+  //   setUser(null);
+  // }, [query, list, setUser]);
 
   const toggle = () => setShowToast(!showToast);
 
   const handleChange = (value) => {
     setQuery(value);
   };
+
   const getUser = () => {
     api
       .get(`/users/${query}`)
       .then((res) => setUser(res.data))
       .catch((err) => {
-        setShowToast(true);
-        console.log(err.response);
+        error(err);
       });
   };
 
@@ -42,11 +57,13 @@ const Home = (props) => {
     api
       .get(`/users/${query}/repos`)
       .then((res) => {
-        setList(res.data);
-        setTitle("repos");
+        setRepo({
+          name: "repos",
+          list: res.data,
+        });
       })
       .catch((err) => {
-        console.log(err.response);
+        error(err);
       });
   };
 
@@ -54,12 +71,19 @@ const Home = (props) => {
     api
       .get(`/users/${query}/starred`)
       .then((res) => {
-        setList(res.data);
-        setTitle("starred");
+        setRepo({
+          name: "starred",
+          list: res.data,
+        });
       })
       .catch((err) => {
-        console.log(err.response);
+        error(err);
       });
+  };
+
+  const error = (err) => {
+    setUser(null);
+    setShowToast(true);
   };
 
   return (
@@ -81,13 +105,13 @@ const Home = (props) => {
             {user && (
               <Row>
                 <Col sm="12">
-                  <MyButton handleClick={getRepos} color="primary">
+                  <Button outline onClick={() => getRepos()} color="primary">
                     Repos
-                  </MyButton>
+                  </Button>
 
-                  <MyButton handleClick={getStarred} color="primary">
+                  <Button outline onClick={() => getStarred()} color="primary">
                     Starred
-                  </MyButton>
+                  </Button>
                 </Col>
               </Row>
             )}
@@ -101,7 +125,8 @@ const Home = (props) => {
         </ToastHeader>
         <ToastBody>Ocorreu um erro</ToastBody>
       </Toast>
-      <Results list={list} title={title} />
+
+      {repo.list.length > 0 && <Results repo={repo} />}
     </Container>
   );
 };

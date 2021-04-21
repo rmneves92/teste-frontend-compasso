@@ -21,7 +21,7 @@ const Header = (props) => {
 
   return (
     <div>
-      <Navbar color="light" light expand="md">
+      <Navbar color="warning" light expand="md">
         <Container>
           <NavbarBrand href="https://github.com/recrutamento-compasso/api-github-interview">
             Teste Compasso
