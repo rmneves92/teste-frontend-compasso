@@ -22,7 +22,7 @@ const Header = (props) => {
         </NavbarBrand>
         <Nav className="mr-auto" navbar>
           <NavItem>
-            <NavLink href="#" link onClick={() => history.push("/")}>
+            <NavLink href="#" onClick={() => history.push("/")}>
               Home
             </NavLink>
           </NavItem>
