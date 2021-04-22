@@ -6,13 +6,18 @@ const SearchBar = ({ value, handleChange, handleClick }) => {
   return (
     <InputGroup>
       <Input
+        data-testid="input"
         value={value}
         placeholder="Digite o nickname do usuário..."
         onChange={(e) => handleChange(e.target.value)}
         onKeyUp={(e) => e.key === "Enter" && handleClick()}
       />
       <InputGroupAddon addonType="append">
-        <Button onClick={() => handleClick()} color="danger">
+        <Button
+          data-testid="btn-search"
+          onClick={() => handleClick()}
+          color="danger"
+        >
           Buscar
         </Button>
       </InputGroupAddon>

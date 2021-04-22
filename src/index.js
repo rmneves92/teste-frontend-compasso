@@ -4,9 +4,13 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import UserProvider from "./context/userContext";
+
 ReactDOM.render(
   <React.Fragment>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </React.Fragment>,
   document.getElementById("root")
 );

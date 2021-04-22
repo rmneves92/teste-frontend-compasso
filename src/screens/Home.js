@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "reactstrap";
 import SearchBar from "../components/searchBar";
 import Results from "../components/results";
 import api from "../services/api";
-import { UserContext } from "../context/userContext";
+import { useUser } from "../context/userContext";
 import {
   Card,
   CardTitle,
@@ -21,22 +21,15 @@ const initialRepoState = {
 };
 const Home = (props) => {
   const [query, setQuery] = useState("");
-  const [repo, setRepo] = useState(initialRepoState);
+  const [repos, setRepos] = useState(initialRepoState);
   const [showToast, setShowToast] = useState(false);
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
 
   useEffect(() => {
-    if (repo.list.length > 0) setRepo(initialRepoState);
-
-    setUser(null);
+    if (repos.list.length > 0) setRepos(initialRepoState);
+    setUser({});
   }, []);
-
-  // useEffect(() => {
-  //   if (list.length > 0) setList([]);
-
-  //   setUser(null);
-  // }, [query, list, setUser]);
 
   const toggle = () => setShowToast(!showToast);
 
@@ -57,8 +50,8 @@ const Home = (props) => {
     api
       .get(`/users/${query}/repos`)
       .then((res) => {
-        setRepo({
-          name: "repos",
+        setRepos({
+          name: "Repositórios",
           list: res.data,
         });
       })
@@ -71,8 +64,8 @@ const Home = (props) => {
     api
       .get(`/users/${query}/starred`)
       .then((res) => {
-        setRepo({
-          name: "starred",
+        setRepos({
+          name: "Mais visitados",
           list: res.data,
         });
       })
@@ -88,10 +81,11 @@ const Home = (props) => {
 
   return (
     <Container>
-      <Row>
+      <Row className="mt-5">
         <Col sm="12">
           <Card body>
             <CardTitle tag="h5">Buscar pelo usuário</CardTitle>
+
             <Row>
               <Col sm="12">
                 <SearchBar
@@ -102,14 +96,25 @@ const Home = (props) => {
               </Col>
             </Row>
 
-            {user && (
-              <Row>
+            {user?.name && (
+              <Row className="mt-4">
                 <Col sm="12">
-                  <Button outline onClick={() => getRepos()} color="primary">
+                  <Button
+                    data-testid="btn-repos"
+                    outline
+                    onClick={() => getRepos()}
+                    color="primary"
+                  >
                     Repos
                   </Button>
 
-                  <Button outline onClick={() => getStarred()} color="primary">
+                  <Button
+                    data-testid="btn-starred"
+                    outline
+                    onClick={() => getStarred()}
+                    color="primary"
+                    className="ml-2"
+                  >
                     Starred
                   </Button>
                 </Col>
@@ -126,7 +131,7 @@ const Home = (props) => {
         <ToastBody>Ocorreu um erro</ToastBody>
       </Toast>
 
-      {repo.list.length > 0 && <Results repo={repo} />}
+      {repos.list.length > 0 && <Results repo={repos} />}
     </Container>
   );
 };

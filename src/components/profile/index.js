@@ -2,9 +2,8 @@ import React from "react";
 import "./styles.scss";
 const Profile = ({ user }) => {
   return (
-    <section>
-      <h1>Detalhes do usuário</h1>
-      <div className="user-details" style={{ display: "flex" }}>
+    <section data-testid="profile">
+      <div className="user-details">
         <img
           className="user-avatar"
           src={user?.avatar_url}

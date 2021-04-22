@@ -11,7 +11,7 @@ import {
 
 const Results = ({ repo }) => {
   return (
-    <Row>
+    <Row className="mt-4 mb-4" data-testid="results">
       <Col sm="12">
         {repo.list.length > 0 && (
           <Card body>
